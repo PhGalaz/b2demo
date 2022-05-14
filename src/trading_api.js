@@ -1,13 +1,17 @@
 const axios = require('axios')
-const crypto = require("crypto");
-// const encrypt = require('./encrypt.js')
+const crypto = require("crypto")
 
-const base = 'https://b2t-api-cmc-staging-5.flexprotect.org/'
-const baseX = 'https://b2t-api-staging-5.flexprotect.org/'
-const base2 = 'https://b2t-api-cmc-staging-5.flexprotect.org/marketdata/cmc/v1/'
+require('dotenv').config()
 
-const api_key_public = '3d751b4e-ab64-4c27-9fb3-caa2ab2de831'
-const api_key_private = '6413d6ea-2b27-46f1-9581-11dfd7767f25'
+const base = process.env.BASE
+const baseX = process.env.BASEX
+const base2 = process.env.BASE2
+
+const api_key_public = process.env.API_KEY_PUBLIC
+const api_key_private = process.env.API_KEY_PRIVATE
+
+
+
 
 
 function getRandom() {
@@ -218,6 +222,7 @@ async function assetInfo(){
 
 async function summary(){
   var furl = base2 + 'summary'
+  console.log(base2)
   const resp = await axios.get(furl, {})
   .then((res) => {
     console.log(res)

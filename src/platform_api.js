@@ -1,13 +1,15 @@
 const axios = require('axios')
-const crypto = require("crypto");
+const crypto = require("crypto")
 
-const base = 'https://b2t-api-cmc-staging-5.flexprotect.org/'
-// const baseX = 'https://b2t-api-staging-5.flexprotect.org/'
-const base2 = 'https://b2t-api-cmc-staging-5.flexprotect.org/marketdata/cmc/v1/'
+require('dotenv').config()
+
+const base = process.env.BASE
+const baseX = process.env.BASEX
+const base2 = process.env.BASE2
 
 
-var email = "test+1@galaz.de"
-var password = "CapHold123!"
+var email = process.env.EMAIL
+var password = process.env.PASSWORD
 
 
 // const config = {
