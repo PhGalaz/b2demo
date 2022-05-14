@@ -727,7 +727,7 @@ async function myOrdersInfo(){
 // orderBookSnapshot('eth_btc')
 // instrumentCandles('btc_usdt','2019-03-13T09:00:00','2019-03-13T11:00:00','1m')
 // assetInfo()
-summary()
+// summary()
 // ticketInfo()
 // tradesInfo('btc_usd')
 
@@ -735,7 +735,7 @@ summary()
 // cancelOrder(-72057592871705472) // !!!!!!
 // ordersHistory()
 // tradesHistory()
-// userBalance()
+userBalance()
 // orderInfo(parseInt('72057592871705472')) // !!!!!!
 // myOrdersInfo()
 
