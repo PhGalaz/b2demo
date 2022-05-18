@@ -768,7 +768,7 @@ async function myOrdersInfo(){
 
 
 
-// supportedInstruments()
+supportedInstruments()
 // orderBookSnapshot('eth_btc')
 // instrumentCandles('btc_usdt','2019-03-13T09:00:00','2019-03-13T11:00:00','1m')
 // assetInfo()
