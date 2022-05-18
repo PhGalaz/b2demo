@@ -20,6 +20,7 @@ function getRandom() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
 function sign(payload) {
   const Sign = crypto
     .createHmac('sha512', api_key_private)
@@ -406,14 +407,31 @@ async function placeOrder(){
 
 
 
-// !!!!!!!!!!!!!
-// errors: [
-//     {
-//       message: "Cancelation failed. Order '-72057592871705470' is not found."
-//     }
-//   ]
+
 
 // Cancels a specified order.
+// data: {
+//   order: {
+//     orderId: '-72057592872552811',
+//     total: 0,
+//     orderType: 0,
+//     commission: 0,
+//     createdAt: '2022-05-18T02:17:41.8194437Z',
+//     unitsFilled: 0,
+//     isPending: false,
+//     status: 'cancelled',
+//     type: 'buy',
+//     amount: 1,
+//     remaining: 1,
+//     executionPrice: 0,
+//     requestedPrice: 1,
+//     stopPrice: 0,
+//     isLimit: true,
+//     instrument: 'btc_usdt',
+//     side: 0,
+//     rejectDetails: ''
+//   }
+// }
 async function cancelOrder(orderId){
   const ts = new Date().toISOString()
   const nonce = getRandom()
@@ -617,6 +635,7 @@ async function userBalance(){
   })
   .then((res) => {
     console.log(res.data)
+    // console.log(res.headers['set-cookie'])
   })
   .catch((error) => {
     console.error(error.response)
@@ -635,9 +654,30 @@ async function userBalance(){
 
 
 
-// !!!!!!!!!!!!!
-// { errorCode: 404, message: 'Order -72057592871705470 not found' }
+
 // Returns order details based on a specified order ID or client order ID.
+// data: {
+//     updatedAt: '2022-05-10T23:48:14.033957Z',
+//     averageFillPrice: '0',
+//     timeInForce: 'GTC',
+//     orderId: '-72057592871944785',
+//     total: 0,
+//     orderType: 0,
+//     commission: 0,
+//     createdAt: '2022-05-10T23:48:13.997898Z',
+//     unitsFilled: 0,
+//     isPending: true,
+//     status: 'working',
+//     type: 'buy',
+//     amount: 1.05814006,
+//     remaining: 1.05814006,
+//     executionPrice: 0,
+//     requestedPrice: 2,
+//     stopPrice: 0,
+//     isLimit: true,
+//     instrument: 'btc_usdt',
+//     side: 0
+//   }
 async function orderInfo(orderId){
   const ts = new Date().toISOString()
   const nonce = getRandom()
@@ -732,16 +772,18 @@ async function myOrdersInfo(){
 // tradesInfo('btc_usd')
 
 // placeOrder() // !!!!!!!
-// cancelOrder(-72057592871705472) // !!!!!!
+// cancelOrder('-72057592872552811')
 // ordersHistory()
 // tradesHistory()
-userBalance()
-// orderInfo(parseInt('72057592871705472')) // !!!!!!
+// userBalance()
+// orderInfo('-72057592871944785')
 // myOrdersInfo()
 
 
 
-
+// Platform API:
+// Could you please make a screen recording where we can see how you are trying to authorize through the Platform API?
+// It is also necessary to open the network tab of the browser and show all the requests that you make. Ther headers and body.
 
 
 
