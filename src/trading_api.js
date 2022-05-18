@@ -192,6 +192,9 @@ async function assetInfo(){
 
 
 
+
+
+
 // summary()
 // Returns summary information about a specified market. The data is aggregated for the last 24 hours.
 // {
@@ -233,6 +236,8 @@ async function summary(){
   })
   return resp
 }
+
+
 
 
 
@@ -656,7 +661,7 @@ async function userBalance(){
 
 
 // Returns order details based on a specified order ID or client order ID.
-// data: {
+//   {
 //     updatedAt: '2022-05-10T23:48:14.033957Z',
 //     averageFillPrice: '0',
 //     timeInForce: 'GTC',
@@ -779,11 +784,6 @@ async function myOrdersInfo(){
 // orderInfo('-72057592871944785')
 // myOrdersInfo()
 
-
-
-// Platform API:
-// Could you please make a screen recording where we can see how you are trying to authorize through the Platform API?
-// It is also necessary to open the network tab of the browser and show all the requests that you make. Ther headers and body.
 
 
 
