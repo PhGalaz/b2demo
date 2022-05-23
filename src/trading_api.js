@@ -1,5 +1,6 @@
 const axios = require('axios')
-const crypto = require("crypto")
+var CryptoJS = require("crypto-js")
+const queryString = require('query-string')
 
 require('dotenv').config()
 
@@ -22,14 +23,12 @@ function getRandom() {
 
 
 function sign(payload) {
-  const Sign = crypto
-    .createHmac('sha512', api_key_private)
-    .update(payload)
-    .digest('hex')
+  const Sign = CryptoJS
+    .HmacSHA512(payload, api_key_private)
+    .toString(CryptoJS.enc.Hex)
     .toUpperCase()
   return Sign
 }
-
 
 
 
@@ -342,24 +341,53 @@ async function tradesInfo(instrument){
 // console.log(url.toString())
 
 
-
-
-
-
 // Places a new order on the exchange.
 async function placeOrder(){
   const ts = new Date().toISOString()
   const nonce = getRandom()
-  let order = {
-    instrument: "btc_usdt",
-    type: "sell",
-    amount: 1,
-    price: 1,
-    isLimit: true
-  }
-  order = new URLSearchParams(order).toString()
+
+  const body = {
+    order: {
+      instrument: 'btc_usdt',
+      type: 'sell',
+      amount: 1,
+      price: 1,
+      isLimit: true
+    },
+    ts: ts,
+    nonce: nonce
+  };
+  const data = '?' + queryString.stringify(body);
+  const data0 = '?' + JSON.stringify(body);
+  const data1 = '?' + new URLSearchParams(body).toString()
+  const data2 = '?' + queryString.stringify(body)
+  const data3 = `?ts=${ts}&nonce=${nonce}&order=%5B${new URLSearchParams(body.order).toString()}%5D`
+  const data4 = '?' + encodeURIComponent(body)
+
+  // let order = {
+  //   instrument: "btc_usdt",
+  //   type: "sell",
+  //   amount: 1,
+  //   price: 1,
+  //   isLimit: true
+  // }
+  // let params = {
+  //   order: {
+  //     instrument: "btc_usdt",
+  //     type: "sell",
+  //     amount: 1,
+  //     price: 1,
+  //     isLimit: true
+  //   },
+  //   ts: ts,
+  //   nonce: nonce
+  // }
+  // order = new URLSearchParams(params).toString()
+  // console.log(order)
+  // let testy = queryString.stringify(params)
+  // console.log(testy)
   // const body = `?ts=${ts}&nonce=${nonce}&order%5Binstrument%5D=btc_usdt&order%5Btype%5D=sell&order%5Bamount%5D=1&order%5Bprice%5D=1&order%5BisLimit%5D=true`
-  const body = `?ts=${ts}&nonce=${nonce}&order=%5B${order}%5D`
+  // let body = `?order=%5B${order}%5D&ts=${ts}&nonce=${nonce}`
   // console.log(body)
   // let body = {
   //   ts: ts,
@@ -375,25 +403,25 @@ async function placeOrder(){
   // body = JSON.stringify(body);
   // body = new URLSearchParams(body).toString()
   // console.log(body)
-  const Sign = sign(body)
+  // body = '?' + order
+  const Sign = sign(data4)
 
   const furl = base + 'frontoffice/api/order'
   const resp = await axios.post(furl, {
     headers: {
-      'Content-Length': body.length,
       Key: api_key_public,
       Sign: Sign
     },
-    body: {
-      ts: ts,
-      nonce: nonce,
+    params: {
       order: {
         instrument: "btc_usdt",
         type: "sell",
         amount: 1,
         price: 1,
         isLimit: true
-      }
+      },
+      ts: ts,
+      nonce: nonce
     }
   })
   .then((res) => {
@@ -587,7 +615,6 @@ async function tradesHistory(){
   const Sign = sign(`?ts=${ts}&nonce=${nonce}`)
   var furl = base + 'frontoffice/api/trade_history'
   const resp = await axios.get(furl, {
-    // payload =
     headers: {
       Key: api_key_public,
       Sign: Sign
@@ -640,7 +667,6 @@ async function userBalance(){
   })
   .then((res) => {
     console.log(res.data)
-    // console.log(res.headers['set-cookie'])
   })
   .catch((error) => {
     console.error(error.response)
@@ -768,7 +794,9 @@ async function myOrdersInfo(){
 
 
 
-supportedInstruments()
+
+
+// supportedInstruments()
 // orderBookSnapshot('eth_btc')
 // instrumentCandles('btc_usdt','2019-03-13T09:00:00','2019-03-13T11:00:00','1m')
 // assetInfo()
@@ -776,7 +804,7 @@ supportedInstruments()
 // ticketInfo()
 // tradesInfo('btc_usd')
 
-// placeOrder() // !!!!!!!
+placeOrder() // !!!!!!!
 // cancelOrder('-72057592872552811')
 // ordersHistory()
 // tradesHistory()

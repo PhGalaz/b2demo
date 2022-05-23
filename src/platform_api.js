@@ -1,5 +1,8 @@
 const axios = require('axios')
-const crypto = require("crypto")
+const CryptoJS = require("crypto-js")
+const crypto = require('crypto')
+
+
 //
 // const axiosCookieJarSupport = require("axios-cookiejar-support").default;
 // const tough = require("tough-cookie");
@@ -11,6 +14,7 @@ const crypto = require("crypto")
 // // const jar = new CookieJar()
 // // const client = wrapper(axios.create({ jar }))
 //
+
 require('dotenv').config()
 
 const base = process.env.BASE
@@ -19,7 +23,7 @@ const base2 = process.env.BASE2
 
 var email = process.env.EMAIL
 var password = process.env.PASSWORD
-//
+
 axios.defaults.baseURL = base
 axios.defaults.withCredentials = true
 //
@@ -35,16 +39,7 @@ function getRandom() {
   max = Math.floor(100000000);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-// //
-// // function sign(payload) {
-// //   const Sign = crypto
-// //     .createHmac('sha512', api_key_private)
-// //     .update(payload)
-// //     .digest('hex')
-// //     .toUpperCase()
-// //   return Sign
-// // }
-// //
+
 function base64URLEncode(str) {
     return str.toString('base64')
         .replace(/\+/g, '-')
@@ -58,7 +53,19 @@ function sha256(buffer) {
 //
 //
 //
+
+
+function base64URLEncode(str) {
+    return str.toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+}
+var verifier = base64URLEncode(crypto.randomBytes(32));
 //
+// console.log(CryptoJS.lib.WordArray.random(32))
+// console.log(crypto.randomBytes(32))
+console.log(verifier)
 //
 //
 //
@@ -125,14 +132,17 @@ async function signin(){
     password: password
   })
   .then(async (res) => {
-    console.log(res.headers)
+    console.log(res)
+    console.log()
+    console.log()
+    console.log()
     var challenge = base64URLEncode(sha256(base64URLEncode(crypto.randomBytes(32))))
     var point = 'identity/connect/authorize'
     const resp = await instance.get(point, {
-      headers: {
-        Cookie0: res.headers['set-cookie'][0],
-        Cookie1: res.headers['set-cookie'][1]
-      },
+      // headers: {
+      //   Cookie0: res.headers['set-cookie'][0],
+      //   Cookie1: res.headers['set-cookie'][1]
+      // },
       params: {
         scope: 'openid profile FrontOffice BackOffice offline_access',
         response_type: 'code',
@@ -150,8 +160,8 @@ async function signin(){
   return resp
 }
 
-
-
+var challenge = base64URLEncode(sha256(base64URLEncode(crypto.randomBytes(32))))
+console.log(`https://b2t-api-cmc-staging-5.flexprotect.org/identity/connect/authorize?client_id=spa_admin&response_type=code &scope=openid%20profile%20FrontOffice%20BackOffice%20offline_access&redirect_uri=https://b2t-api-cmc-staging-5.flexprotect.org/sign-in-done&nonce=4578456&code_challenge=${challenge}&code_challenge_method=S256`)
 
 
 //
@@ -204,5 +214,6 @@ async function signin(){
 //
 //
 //
-signin(email, password)
+
+// signin(email, password)
 // connectAuthorize()
