@@ -32,6 +32,48 @@ function sign(payload) {
 
 
 
+
+
+
+
+
+
+
+
+
+// Obtain the list of API keys via API.
+async function obtainKeys(){
+  const ts = new Date().toISOString()
+  const nonce = getRandom()
+  const Sign = sign(`?ts=${ts}&nonce=${nonce}`)
+  var furl = base + 'frontoffice/api/key'
+  const resp = await axios.get(furl, {
+    headers: {
+      Key: api_key_public,
+      Sign: Sign
+    },
+    params: {
+      ts: ts,
+      nonce: nonce
+    }
+  })
+  .then((res) => {
+    console.log(res.data)
+  })
+  .catch((error) => {
+    console.error(error.response)
+  })
+  return resp
+}
+
+
+
+
+
+
+
+
+
 // Returns up-to-date information about all currency pairs (instruments) supported by the exchange.
 // zec_eth:
 //  { baseAsset: 'zec',
@@ -130,9 +172,10 @@ async function instrumentCandles(instrument,startDate,endDate,type,count){
   var furl = base + 'marketdata/instruments/' + instrument + '/history'
   const resp = await axios.get(furl, {
     params: {
-      startDate: startDate,
-      endDate: endDate,
-      type: type
+      startDate: startDate, // YYYY-MM-DDThh:mm:ss
+      endDate: endDate, // YYYY-MM-DDThh:mm:ss
+      type: type, // The detail level of the chart data; the following values are supported: 1m, 5m, 15m, 30m, 1h, 12h, 1d, 1w, 1M
+      count: count // The number of candles to return; the default value is 1000 (which is the maximum supported value)
     }
   })
   .then((res) => {
@@ -225,7 +268,6 @@ async function assetInfo(){
 
 async function summary(){
   var furl = base2 + 'summary'
-  console.log(base2)
   const resp = await axios.get(furl, {})
   .then((res) => {
     console.log(res)
@@ -330,19 +372,13 @@ async function tradesInfo(instrument){
 
 ////////////////////////////////// Private calls //////////////////////////////////
 
-//
-// const obj = {
-//   param1: 'something',
-//   param2: 'somethingelse',
-//   param3: 'another'
-// }
-// const url = new URL(`http://example.com`);
-// url.search = new URLSearchParams(obj);
-// console.log(url.toString())
+
+
+
 
 
 // Places a new order on the exchange.
-async function placeOrder(){
+async function placeOrder(instrument,type,amount,price,isLimit,isStop,isFok,clientOrderId){
   const ts = new Date().toISOString()
   const nonce = getRandom()
 
@@ -362,7 +398,12 @@ async function placeOrder(){
   const data1 = '?' + new URLSearchParams(body).toString()
   const data2 = '?' + queryString.stringify(body)
   const data3 = `?ts=${ts}&nonce=${nonce}&order=%5B${new URLSearchParams(body.order).toString()}%5D`
+  console.log('data3: ', data3)
   const data4 = '?' + encodeURIComponent(body)
+
+  const url = new URL(base);
+  url.search = new URLSearchParams(body);
+  console.log(url.search.toString())
 
   // let order = {
   //   instrument: "btc_usdt",
@@ -404,7 +445,7 @@ async function placeOrder(){
   // body = new URLSearchParams(body).toString()
   // console.log(body)
   // body = '?' + order
-  const Sign = sign(data4)
+  const Sign = sign(new URLSearchParams(body))
 
   const furl = base + 'frontoffice/api/order'
   const resp = await axios.post(furl, {
@@ -795,6 +836,7 @@ async function myOrdersInfo(){
 
 
 
+// obtainKeys() // !!!!!!!!!!
 
 // supportedInstruments()
 // orderBookSnapshot('eth_btc')
@@ -804,13 +846,13 @@ async function myOrdersInfo(){
 // ticketInfo()
 // tradesInfo('btc_usd')
 
-placeOrder() // !!!!!!!
+// placeOrder() // !!!!!!!
 // cancelOrder('-72057592872552811')
 // ordersHistory()
 // tradesHistory()
 // userBalance()
 // orderInfo('-72057592871944785')
-// myOrdersInfo()
+myOrdersInfo()
 
 
 

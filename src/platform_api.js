@@ -1,6 +1,6 @@
 const axios = require('axios')
 const CryptoJS = require("crypto-js")
-const crypto = require('crypto')
+crypto = require('node:crypto')
 
 
 //
@@ -50,6 +50,8 @@ function base64URLEncode(str) {
 function sha256(buffer) {
     return crypto.createHash('sha256').update(buffer).digest()
 }
+
+
 //
 //
 //
@@ -61,11 +63,16 @@ function base64URLEncode(str) {
         .replace(/\//g, '_')
         .replace(/=/g, '');
 }
+
 var verifier = base64URLEncode(crypto.randomBytes(32));
-//
+
+var challenge = base64URLEncode(sha256(base64URLEncode(verifier)))
+
+
 // console.log(CryptoJS.lib.WordArray.random(32))
 // console.log(crypto.randomBytes(32))
 console.log(verifier)
+console.log(challenge)
 //
 //
 //
