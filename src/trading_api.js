@@ -404,46 +404,6 @@ async function placeOrder(instrument,type,amount,price,isLimit,isStop,isFok,clie
   url.search = new URLSearchParams(body);
   console.log(url.search.toString())
 
-  // let order = {
-  //   instrument: "btc_usdt",
-  //   type: "sell",
-  //   amount: 1,
-  //   price: 1,
-  //   isLimit: true
-  // }
-  // let params = {
-  //   order: {
-  //     instrument: "btc_usdt",
-  //     type: "sell",
-  //     amount: 1,
-  //     price: 1,
-  //     isLimit: true
-  //   },
-  //   ts: ts,
-  //   nonce: nonce
-  // }
-  // order = new URLSearchParams(params).toString()
-  // console.log(order)
-  // let testy = queryString.stringify(params)
-  // console.log(testy)
-  // const body = `?ts=${ts}&nonce=${nonce}&order%5Binstrument%5D=btc_usdt&order%5Btype%5D=sell&order%5Bamount%5D=1&order%5Bprice%5D=1&order%5BisLimit%5D=true`
-  // let body = `?order=%5B${order}%5D&ts=${ts}&nonce=${nonce}`
-  // console.log(body)
-  // let body = {
-  //   ts: ts,
-  //   nonce: nonce,
-  //   order: {
-  //     instrument: "btc_usdt",
-  //     type: "sell",
-  //     amount: 1,
-  //     price: 1,
-  //     isLimit: true
-  //   }
-  // }
-  // body = JSON.stringify(body);
-  // body = new URLSearchParams(body).toString()
-  // console.log(body)
-  // body = '?' + order
   const Sign = sign(new URLSearchParams(body))
 
   const furl = base + 'frontoffice/api/order'
