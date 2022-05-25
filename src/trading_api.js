@@ -5,7 +5,6 @@ const queryString = require('query-string')
 require('dotenv').config()
 
 const base = process.env.BASE
-const baseX = process.env.BASEX
 const base2 = process.env.BASE2
 
 const api_key_public = process.env.API_KEY_PUBLIC
@@ -853,6 +852,20 @@ async function myOrdersInfo(){
 // userBalance()
 // orderInfo('-72057592871944785')
 myOrdersInfo()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

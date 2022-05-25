@@ -3,7 +3,6 @@ const CryptoJS = require("crypto-js")
 crypto = require('node:crypto')
 
 
-//
 // const axiosCookieJarSupport = require("axios-cookiejar-support").default;
 // const tough = require("tough-cookie");
 //
@@ -13,33 +12,34 @@ crypto = require('node:crypto')
 // //
 // // const jar = new CookieJar()
 // // const client = wrapper(axios.create({ jar }))
-//
+
 
 require('dotenv').config()
 
 const base = process.env.BASE
-const baseX = process.env.BASEX
-const base2 = process.env.BASE2
 
 var email = process.env.EMAIL
 var password = process.env.PASSWORD
 
 axios.defaults.baseURL = base
 axios.defaults.withCredentials = true
-//
-//
-//
+
+
 // // const config = {
 // //     headers: { Authorization: `Bearer e5be984d-a913-4928-87b5-074474302b0b` }
 // // };
-//
-//
+
+
+// Create nonce
 function getRandom() {
   min = Math.ceil(1);
   max = Math.floor(100000000);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+
+// Functions to create verifier and challenge
 function base64URLEncode(str) {
     return str.toString('base64')
         .replace(/\+/g, '-')
@@ -52,30 +52,7 @@ function sha256(buffer) {
 }
 
 
-//
-//
-//
 
-
-function base64URLEncode(str) {
-    return str.toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-}
-
-var verifier = base64URLEncode(crypto.randomBytes(32));
-
-var challenge = base64URLEncode(sha256(base64URLEncode(verifier)))
-
-
-// console.log(CryptoJS.lib.WordArray.random(32))
-// console.log(crypto.randomBytes(32))
-console.log(verifier)
-console.log(challenge)
-//
-//
-//
 // // var XMLHttpRequest = require('xhr2')
 // // var xhr = new XMLHttpRequest()
 // //
@@ -99,29 +76,6 @@ console.log(challenge)
 // //     console.log(ourData);
 // // }
 // // ourRequest.send();
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// // sign-in request must be sent to obtain cookies.
-// // {
-// //   "secondFactorRequired": true,
-// //   "message": "For your security, we have emailed you a one-time authentication code. Please enter this code below to proceed.",
-// //   "provider": "Email"
-// // }
-// // { secondFactorRequired: false,
-// //   account:
-// //    { nickname: 'CapitalHolding',
-// //      email: 'test+1@galaz.de',
-// //      id: '39ac9401-77e0-425c-ac7f-064667f52af2' } }
-
-
 
 
 
@@ -140,9 +94,7 @@ async function signin(){
   })
   .then(async (res) => {
     console.log(res)
-    console.log()
-    console.log()
-    console.log()
+
     var challenge = base64URLEncode(sha256(base64URLEncode(crypto.randomBytes(32))))
     var point = 'identity/connect/authorize'
     const resp = await instance.get(point, {
@@ -167,17 +119,9 @@ async function signin(){
   return resp
 }
 
-var challenge = base64URLEncode(sha256(base64URLEncode(crypto.randomBytes(32))))
-console.log(`https://b2t-api-cmc-staging-5.flexprotect.org/identity/connect/authorize?client_id=spa_admin&response_type=code &scope=openid%20profile%20FrontOffice%20BackOffice%20offline_access&redirect_uri=https://b2t-api-cmc-staging-5.flexprotect.org/sign-in-done&nonce=4578456&code_challenge=${challenge}&code_challenge_method=S256`)
 
 
-//
-//
-// // const transport = axios.create({
-// //   withCredentials: true
-// // })
-//
-//
+
 // // In case of successful authorization, cookies will be provided which are valid only for IdentityServer.
 //
 // // Next, a request must be sent to obtain the xmlHttpRequest.responseURL code.
@@ -212,15 +156,10 @@ console.log(`https://b2t-api-cmc-staging-5.flexprotect.org/identity/connect/auth
 //   })
 //   return resp
 // }
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+
+
 
 // signin(email, password)
 // connectAuthorize()
