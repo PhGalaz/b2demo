@@ -343,7 +343,7 @@ async function assetInfo(){
 // }
 
 async function summary(instrument){
-  var furl = base2 + 'summary'
+  let furl = base2 + 'summary'
   let resp = await axios.get(furl, {})
   // .then((res) => {
   //   console.log(res.data[instrument])
@@ -351,7 +351,12 @@ async function summary(instrument){
   .catch((error) => {
     console.error(error.response)
   })
-  return resp.data[instrument]
+  let resultado = []
+  instrument.forEach(function(item){
+    resultado.push(resp.data[item])
+  })
+  console.log(resultado)
+  return resultado
 }
 
 
@@ -892,7 +897,7 @@ async function myOrdersInfo(){
 // orderBookSnapshot('btc_usdt')
 // instrumentCandles('btc_usdt','2019-03-13T09:00:00','2019-03-13T11:00:00','1m')
 // assetInfo()
-summary("BTC_USDT")
+summary(["BTC_USDT","EUR_USDT"])
 // ticketInfo()
 // tradesInfo('btc_usd')
 
