@@ -351,9 +351,20 @@ async function summary(instrument){
   .catch((error) => {
     console.error(error.response)
   })
-  console.log(resp.data[instrument])
   return resp.data[instrument]
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ticketInfo()
