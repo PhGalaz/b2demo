@@ -47,9 +47,12 @@ function base64URLEncode(str) {
         .replace(/=/g, '')
 }
 
+
 function sha256(buffer) {
     return crypto.createHash('sha256').update(buffer).digest()
 }
+
+
 
 
 
@@ -88,25 +91,25 @@ const instance = axios.create({
 
 async function signin(){
   var point = 'identity/sign-in'
-  let resp = await instance.post(point, {
+  const resp = await instance.post(point, {
     email: email,
     password: password
   })
   .then(async (res) => {
     console.log(res)
-
+    console.log(res.headers['set-cookie'][0])
     var challenge = base64URLEncode(sha256(base64URLEncode(crypto.randomBytes(32))))
     var point = 'identity/connect/authorize'
     const resp = await instance.get(point, {
       // headers: {
-      //   Cookie0: res.headers['set-cookie'][0],
-      //   Cookie1: res.headers['set-cookie'][1]
+      //   'X-CSRF-TOKEN': res.headers['set-cookie'][0],
       // },
       params: {
         scope: 'openid profile FrontOffice BackOffice offline_access',
         response_type: 'code',
         client_id: 'spa_admin',
         redirect_uri: base + 'sign-in-done',
+        state: 'f27332fa-4e7a-4a82-a586-00e58ec63333',
         code_challenge: challenge,
         code_challenge_method: 'S256',
         nonce: getRandom()
@@ -161,5 +164,5 @@ async function signin(){
 
 
 
-// signin(email, password)
+signin(email, password)
 // connectAuthorize()
