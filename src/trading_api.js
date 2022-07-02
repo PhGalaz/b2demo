@@ -342,20 +342,16 @@ async function assetInfo(){
 //   low24hr: '18147.45'
 // }
 
-async function summary(instrument){
+async function summary(instruments){
   let furl = base2 + 'summary'
   let resp = await axios.get(furl, {})
-  // .then((res) => {
-  //   console.log(res.data[instrument])
-  // })
   .catch((error) => {
     console.error(error.response)
   })
   let resultado = []
-  instrument.forEach(function(item){
+  instruments.forEach(function(item){
     resultado.push(resp.data[item])
   })
-  console.log(resultado)
   return resultado
 }
 
