@@ -1,4 +1,6 @@
 const axios = require('axios')
+const fetch = require("node-fetch-commonjs")
+
 const CryptoJS = require("crypto-js")
 const queryString = require('query-string')
 
@@ -22,6 +24,7 @@ function getRandom() {
 
 
 function sign(payload) {
+  console.log(payload)
   const Sign = CryptoJS
     .HmacSHA512(payload, api_key_private)
     .toString(CryptoJS.enc.Hex)
@@ -341,14 +344,13 @@ async function assetInfo(){
 //   high24hr: '19556.22',
 //   low24hr: '18147.45'
 // }
-
 async function summary(instruments){
   let furl = base2 + 'summary'
+  let resultado = []
   let resp = await axios.get(furl, {})
   .catch((error) => {
     console.error(error.response)
   })
-  let resultado = []
   instruments.forEach(function(item){
     resultado.push(resp.data[item])
   })
@@ -459,60 +461,121 @@ async function tradesInfo(instrument){
 
 
 
-// Places a new order on the exchange.
+// // Places a new order on the exchange.
+// async function placeOrder(instrument,type,amount,price,isLimit,isStop,isFok,clientOrderId){
+//   const ts = new Date().toISOString()
+//   const nonce = getRandom()
+  
+//   const order = {
+//     instrument: 'btc_usdt',
+//     type: 'sell',
+//     amount: 1,
+//     price: 100000,
+//     isLimit: true
+//   }
+
+//   const body = new URLSearchParams({
+//     ts: ts,
+//     nonce: nonce,
+//     order: {
+//       instrument: 'btc_usdt',
+//       type: 'sell',
+//       amount: 1,
+//       price: 100000,
+//       isLimit: true
+//     }
+//   }).toString()
+
+//   console.log("body: ", "?" + body)
+
+//   const Sign = sign("?" + body)
+
+//   const furl = base + 'frontoffice/api/order'
+//   const resp = await axios.post(furl, {
+//     headers: {
+//       Key: api_key_public,
+//       Sign: Sign
+//     },
+//     params: {
+//       ts: ts,
+//       nonce: nonce,
+//       order: {
+//         instrument: "btc_usdt",
+//         type: "sell",
+//         amount: 1,
+//         price: 100000,
+//         isLimit: true
+//       }
+//     }
+//   })
+//   .then((res) => {
+//     console.log(res)
+//   })
+//   .catch((error) => {
+//     console.error(error)
+//   })
+//   return resp
+// }
+
+
+
 async function placeOrder(instrument,type,amount,price,isLimit,isStop,isFok,clientOrderId){
   const ts = new Date().toISOString()
   const nonce = getRandom()
-  
-  const order = {
-    instrument: 'btc_usdt',
-    type: 'sell',
-    amount: 1,
-    price: 100000,
-    isLimit: true
-  }
 
-  const body = {
-    ts: ts,
-    nonce: nonce,
+  const params = {
     order: {
-      instrument: 'btc_usdt',
-      type: 'sell',
+      instrument: "btc_usdt",
+      type: "sell",
       amount: 1,
       price: 100000,
       isLimit: true
-    }
-  };
+    },
+    ts: ts,
+    nonce: nonce
+  }
 
-  // const dataDoc = JSON.stringify(body)
-  const data = '?' + queryString.stringify(body)
-  const data0 = '?' + JSON.stringify(body);
-  const data1 = '?' + new URLSearchParams(body).toString()
-  const data3 = `?order=${JSON.stringify(order)}&ts=${ts}&nonce=${nonce}`
-  const data4 = '?' + encodeURIComponent(body)
+  const data = JSON.stringify(params);
 
-  // const url = new URL(base);
-  // url.search = new URLSearchParams(body);
+  const Sign = sign(data)
 
-  const Sign = sign(JSON.stringify(body))
 
+  
+  // function getParam(o, searchParam = new URLSearchParams) {
+  //   Object.entries(o).forEach(([k, v]) => {
+  //     if (v !== null && typeof v === 'object')
+  //       getParam(v, searchParam)
+  //     else
+  //       searchParam.append(k, v)
+  //   })
+    
+  //   return searchParam
+  // }
+  
+  // const searchParam = "?" + getParam(params);
+  
+  // console.log(
+  //   searchParam.toString()
+  // )
+
+
+  // const Sign = sign(searchParam.toString())
   const furl = base + 'frontoffice/api/order'
   const resp = await axios.post(furl, {
     headers: {
-      // 'Content-Length': body.length,
       Key: api_key_public,
       Sign: Sign
     },
     params: {
-      ts: ts,
-      nonce: nonce,
       order: {
         instrument: "btc_usdt",
         type: "sell",
         amount: 1,
         price: 100000,
         isLimit: true
-      }
+      },
+      ts: ts,
+      nonce: nonce
     }
   })
   .then((res) => {
@@ -523,6 +586,7 @@ async function placeOrder(instrument,type,amount,price,isLimit,isStop,isFok,clie
   })
   return resp
 }
+
 
 
 
@@ -893,11 +957,11 @@ async function myOrdersInfo(){
 // orderBookSnapshot('btc_usdt')
 // instrumentCandles('btc_usdt','2019-03-13T09:00:00','2019-03-13T11:00:00','1m')
 // assetInfo()
-summary(["BTC_USDT","EUR_USDT"])
+// summary("BTC_USDT","EUR_USDT","ETH_USD"])
 // ticketInfo()
 // tradesInfo('btc_usd')
 
-// placeOrder() // !!!!!!!
+placeOrder() // !!!!!!!
 // cancelOrder('-72057592872552811')
 // ordersHistory()
 // tradesHistory()
