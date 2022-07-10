@@ -108,7 +108,6 @@ async function signin(){
 
 async function connectAuthorize(){
   var verifier = helpers.generateRandomString(128)
-  // var verifier = "S5WXi6DEETNV8F38pzTfTicxlXXmOe4FZfdU2VmJUWijPEaX81OzVFYI2ZClqKGk74lk4QGfnTeITggz0Jo6mqdK8H1W600qo1XYAn7RTqKdcbSMOqBZGxEFVxZDZjl6"
   var challenge = await helpers.deriveChallenge(verifier)
   console.log("verifier", verifier)
   console.log("challenge", challenge)
